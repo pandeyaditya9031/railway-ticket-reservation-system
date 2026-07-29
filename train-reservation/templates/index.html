@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Railway Ticket Reservation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="board-header">
+  <div class="board-header__top">
+    <span class="board-header__mark">&#9673; IRCTC-STYLE DEMO</span>
+    <span class="board-header__clock" id="liveClock">--:--:--</span>
+  </div>
+  <h1 class="split-flap" id="splitFlapTitle" aria-label="Railway Ticket Reservation">
+    <span data-final="R">R</span><span data-final="A">A</span><span data-final="I">I</span><span data-final="L">L</span><span data-final="W">W</span><span data-final="A">A</span><span data-final="Y">Y</span><span class="gap"></span><span data-final="T">T</span><span data-final="I">I</span><span data-final="C">C</span><span data-final="K">K</span><span data-final="E">E</span><span data-final="T">T</span><span class="gap"></span><span data-final="R">R</span><span data-final="E">E</span><span data-final="S">S</span><span data-final="E">E</span><span data-final="R">R</span><span data-final="V">V</span><span data-final="A">A</span><span data-final="T">T</span><span data-final="I">I</span><span data-final="O">O</span><span data-final="N">N</span>
+  </h1>
+  <p class="board-header__subtitle">Digitised from a legacy console booking program &mdash; now on the web</p>
+</div>
+
+<nav class="menu" id="mainMenu">
+  <button class="menu__tile" data-section="trains">
+    <span class="menu__num">01</span>
+    <span class="menu__label">Train Details</span>
+  </button>
+  <button class="menu__tile" data-section="update">
+    <span class="menu__num">02</span>
+    <span class="menu__label">Update Train Details</span>
+  </button>
+  <button class="menu__tile" data-section="reserve">
+    <span class="menu__num">03</span>
+    <span class="menu__label">Reserve a Ticket</span>
+  </button>
+  <button class="menu__tile" data-section="cancel">
+    <span class="menu__num">04</span>
+    <span class="menu__label">Cancel a Ticket</span>
+  </button>
+  <button class="menu__tile" data-section="status">
+    <span class="menu__num">05</span>
+    <span class="menu__label">Check Ticket Status</span>
+  </button>
+</nav>
+
+<main class="stage">
+
+  <!-- 1. TRAIN DETAILS -->
+  <section class="panel" id="panel-trains" hidden>
+    <header class="panel__head">
+      <h2>01 &middot; Train Details</h2>
+      <p>Every train currently in the system, with live seat availability by class.</p>
+    </header>
+    <div id="trainsList" class="train-grid"></div>
+  </section>
+
+  <!-- 2. UPDATE TRAIN DETAILS -->
+  <section class="panel" id="panel-update" hidden>
+    <header class="panel__head">
+      <h2>02 &middot; Update Train Details</h2>
+      <p>Staff only. Add a new train or overwrite an existing train number's details.</p>
+    </header>
+
+    <form id="updateForm" class="form-card">
+      <div class="form-row">
+        <label>Staff Password
+          <input type="password" name="password" required placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;">
+        </label>
+        <label>Train Number
+          <input type="number" name="trainno" required min="1" placeholder="e.g. 12951">
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Train Name
+          <input type="text" name="trainname" required placeholder="e.g. Mumbai Rajdhani Express">
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Starting Point
+          <input type="text" name="startingpoint" required placeholder="e.g. Mumbai Central">
+        </label>
+        <label>Destination
+          <input type="text" name="destination" required placeholder="e.g. New Delhi">
+        </label>
+      </div>
+      <fieldset class="seat-fieldset">
+        <legend>Seats per class</legend>
+        <div class="form-row form-row--five">
+          <label>A/C First <input type="number" name="af_seats" min="0" required value="0"></label>
+          <label>A/C Second <input type="number" name="as_seats" min="0" required value="0"></label>
+          <label>1st Sleeper <input type="number" name="fs_seats" min="0" required value="0"></label>
+          <label>A/C Chair Car <input type="number" name="ac_seats" min="0" required value="0"></label>
+          <label>2nd Sleeper <input type="number" name="ss_seats" min="0" required value="0"></label>
+        </div>
+      </fieldset>
+      <button type="submit" class="btn btn--primary">Save Train Details</button>
+    </form>
+    <div id="updateResult" class="result-slot"></div>
+  </section>
+
+  <!-- 3. RESERVE A TICKET -->
+  <section class="panel" id="panel-reserve" hidden>
+    <header class="panel__head">
+      <h2>03 &middot; Reserve a Ticket</h2>
+      <p>Confirmed if a seat is free in your chosen class, otherwise you're placed on the waitlist.</p>
+    </header>
+
+    <form id="reserveForm" class="form-card">
+      <div class="form-row">
+        <label>Train Number
+          <input type="number" name="trainno" required min="1" placeholder="e.g. 12951">
+        </label>
+        <label>Travel Class
+          <select name="class_code" id="classSelect" required>
+            <option value="" disabled selected>Select a class&hellip;</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>Passenger Name
+          <input type="text" name="name" required placeholder="Full name">
+        </label>
+        <label>Age
+          <input type="number" name="age" required min="1" max="130" placeholder="e.g. 34">
+        </label>
+      </div>
+      <button type="submit" class="btn btn--primary">Book Ticket</button>
+    </form>
+    <div id="reserveResult" class="result-slot"></div>
+  </section>
+
+  <!-- 4. CANCEL A TICKET -->
+  <section class="panel" id="panel-cancel" hidden>
+    <header class="panel__head">
+      <h2>04 &middot; Cancel a Ticket</h2>
+      <p>Enter your reservation number to cancel. A waitlisted passenger moves up automatically.</p>
+    </header>
+
+    <form id="cancelForm" class="form-card form-card--inline">
+      <label>Reservation Number
+        <input type="number" name="resno" required min="1" placeholder="e.g. 4">
+      </label>
+      <button type="submit" class="btn btn--rust">Cancel Reservation</button>
+    </form>
+    <div id="cancelResult" class="result-slot"></div>
+  </section>
+
+  <!-- 5. CHECK TICKET STATUS -->
+  <section class="panel" id="panel-status" hidden>
+    <header class="panel__head">
+      <h2>05 &middot; Check Ticket Status</h2>
+      <p>Look up a reservation to see the passenger, class and current status.</p>
+    </header>
+
+    <form id="statusForm" class="form-card form-card--inline">
+      <label>Reservation Number
+        <input type="number" name="resno" required min="1" placeholder="e.g. 4">
+      </label>
+      <button type="submit" class="btn btn--primary">Look Up</button>
+    </form>
+    <div id="statusResult" class="result-slot"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Rebuilt from a Turbo C++ console project &mdash; Flask + SQLite backend, vanilla HTML/CSS/JS frontend.</p>
+</footer>
+
+<template id="ticketStubTemplate">
+  <div class="ticket-stub">
+    <div class="ticket-stub__main">
+      <div class="ticket-stub__row">
+        <span class="ticket-stub__label">Passenger</span>
+        <span class="ticket-stub__value ticket-name"></span>
+      </div>
+      <div class="ticket-stub__row">
+        <span class="ticket-stub__label">Age</span>
+        <span class="ticket-stub__value ticket-age"></span>
+      </div>
+      <div class="ticket-stub__row">
+        <span class="ticket-stub__label">Train</span>
+        <span class="ticket-stub__value ticket-train"></span>
+      </div>
+      <div class="ticket-stub__row">
+        <span class="ticket-stub__label">Class</span>
+        <span class="ticket-stub__value ticket-class"></span>
+      </div>
+    </div>
+    <div class="ticket-stub__perforation"></div>
+    <div class="ticket-stub__stub">
+      <span class="ticket-stub__label">Res. No.</span>
+      <span class="ticket-stub__resno"></span>
+      <span class="ticket-stub__status"></span>
+    </div>
+  </div>
+</template>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

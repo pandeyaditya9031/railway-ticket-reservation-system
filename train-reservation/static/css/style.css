@@ -1,0 +1,504 @@
+/* ==========================================================================
+   Design tokens
+   ========================================================================== */
+:root {
+  --ink: #12233A;
+  --ink-soft: #1B3153;
+  --paper: #F3ECD8;
+  --paper-dim: #E7DEC4;
+  --amber: #E8952B;
+  --amber-dim: #B9741C;
+  --teal: #2F6F62;
+  --rust: #B5482E;
+  --brass: #9C8A62;
+  --board-black: #0B1626;
+
+  --font-display: 'Oswald', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --radius: 6px;
+  --shadow-card: 0 8px 24px rgba(11, 22, 38, 0.18);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+button, input, select {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Split-flap departure board header
+   ========================================================================== */
+.board-header {
+  background: var(--board-black);
+  color: var(--paper);
+  padding: 28px 24px 32px;
+  border-bottom: 6px solid var(--amber);
+}
+
+.board-header__top {
+  max-width: 980px;
+  margin: 0 auto 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--amber);
+  text-transform: uppercase;
+}
+
+.split-flap {
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  padding: 0;
+}
+
+.split-flap span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 46px;
+  background: linear-gradient(180deg, var(--ink-soft) 0%, var(--ink) 100%);
+  color: var(--paper);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.6rem;
+  border-radius: 3px;
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(243, 236, 216, 0.08);
+  animation: flap-settle 900ms steps(1) both;
+}
+
+.split-flap span.gap {
+  width: 14px;
+  height: 46px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.split-flap span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+@keyframes flap-settle {
+  0%   { transform: rotateX(90deg); opacity: 0; }
+  60%  { transform: rotateX(0deg); opacity: 1; }
+  100% { transform: rotateX(0deg); opacity: 1; }
+}
+
+.split-flap span:nth-child(1)  { animation-delay: 0ms; }
+.split-flap span:nth-child(2)  { animation-delay: 40ms; }
+.split-flap span:nth-child(3)  { animation-delay: 80ms; }
+.split-flap span:nth-child(4)  { animation-delay: 120ms; }
+.split-flap span:nth-child(5)  { animation-delay: 160ms; }
+.split-flap span:nth-child(6)  { animation-delay: 200ms; }
+.split-flap span:nth-child(7)  { animation-delay: 240ms; }
+.split-flap span:nth-child(9)  { animation-delay: 300ms; }
+.split-flap span:nth-child(10) { animation-delay: 340ms; }
+.split-flap span:nth-child(11) { animation-delay: 380ms; }
+.split-flap span:nth-child(12) { animation-delay: 420ms; }
+.split-flap span:nth-child(13) { animation-delay: 460ms; }
+.split-flap span:nth-child(14) { animation-delay: 500ms; }
+.split-flap span:nth-child(16) { animation-delay: 560ms; }
+.split-flap span:nth-child(17) { animation-delay: 600ms; }
+.split-flap span:nth-child(18) { animation-delay: 640ms; }
+.split-flap span:nth-child(19) { animation-delay: 680ms; }
+.split-flap span:nth-child(20) { animation-delay: 720ms; }
+.split-flap span:nth-child(21) { animation-delay: 760ms; }
+.split-flap span:nth-child(22) { animation-delay: 800ms; }
+.split-flap span:nth-child(23) { animation-delay: 840ms; }
+.split-flap span:nth-child(24) { animation-delay: 880ms; }
+.split-flap span:nth-child(25) { animation-delay: 920ms; }
+.split-flap span:nth-child(26) { animation-delay: 960ms; }
+
+.board-header__subtitle {
+  max-width: 980px;
+  margin: 16px auto 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--paper-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .split-flap span { animation: none; }
+}
+
+/* ==========================================================================
+   Menu
+   ========================================================================== */
+.menu {
+  max-width: 980px;
+  margin: -22px auto 0;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.menu__tile {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 14px 12px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow-card);
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.menu__tile:hover { transform: translateY(-2px); }
+
+.menu__tile.is-active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.menu__num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--amber-dim);
+}
+.menu__tile.is-active .menu__num { color: var(--amber); }
+
+.menu__label {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+/* ==========================================================================
+   Stage / panels
+   ========================================================================== */
+.stage {
+  max-width: 980px;
+  margin: 32px auto 60px;
+  padding: 0 24px;
+}
+
+.panel__head h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin: 0 0 4px;
+  border-left: 6px solid var(--amber);
+  padding-left: 12px;
+}
+
+.panel__head p {
+  margin: 0 0 24px 18px;
+  color: var(--ink-soft);
+  opacity: 0.75;
+}
+
+/* ==========================================================================
+   Train grid / cards
+   ========================================================================== */
+.train-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.train-card {
+  background: #fff;
+  border: 1px solid var(--brass);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-card);
+}
+
+.train-card__no {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--amber-dim);
+  letter-spacing: 0.06em;
+}
+
+.train-card__name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin: 2px 0 6px;
+}
+
+.train-card__route {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.train-card__seats {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 4px;
+  font-size: 0.82rem;
+  border-top: 1px dashed var(--brass);
+  padding-top: 10px;
+}
+
+.train-card__seats .seat-avail {
+  font-family: var(--font-mono);
+}
+
+.seat-avail.low { color: var(--rust); }
+.seat-avail.ok { color: var(--teal); }
+
+.empty-note {
+  color: var(--ink-soft);
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+.form-card {
+  background: #fff;
+  border: 1px solid var(--brass);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  max-width: 640px;
+}
+
+.form-card--inline {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.form-row--five {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.form-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.form-card input,
+.form-card select {
+  border: 1.5px solid var(--brass);
+  border-radius: 4px;
+  padding: 9px 10px;
+  font-size: 0.95rem;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.seat-fieldset {
+  border: 1px dashed var(--brass);
+  border-radius: 4px;
+  padding: 12px 14px 4px;
+  margin-bottom: 16px;
+}
+
+.seat-fieldset legend {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--amber-dim);
+  padding: 0 6px;
+}
+
+.btn {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 4px;
+  padding: 11px 22px;
+  cursor: pointer;
+  transition: filter 120ms ease;
+}
+.btn:hover { filter: brightness(1.08); }
+
+.btn--primary { background: var(--ink); color: var(--paper); }
+.btn--rust { background: var(--rust); color: var(--paper); }
+
+/* ==========================================================================
+   Result slots / alerts
+   ========================================================================== */
+.result-slot { margin-top: 20px; }
+
+.alert {
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  max-width: 640px;
+}
+
+.alert--error {
+  background: #FBE7E1;
+  border: 1px solid var(--rust);
+  color: var(--rust);
+}
+
+.alert--success {
+  background: #E4EFE9;
+  border: 1px solid var(--teal);
+  color: var(--teal);
+}
+
+/* ==========================================================================
+   Ticket stub
+   ========================================================================== */
+.ticket-stub {
+  display: flex;
+  max-width: 640px;
+  background: #fff;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--brass);
+}
+
+.ticket-stub__main {
+  flex: 1;
+  padding: 18px 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.ticket-stub__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px dotted var(--paper-dim);
+  padding-bottom: 4px;
+}
+
+.ticket-stub__label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brass);
+}
+
+.ticket-stub__value {
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  text-align: right;
+}
+
+.ticket-stub__perforation {
+  width: 0;
+  border-left: 2px dashed var(--brass);
+  position: relative;
+}
+
+.ticket-stub__perforation::before,
+.ticket-stub__perforation::after {
+  content: "";
+  position: absolute;
+  left: -9px;
+  width: 18px;
+  height: 18px;
+  background: var(--paper);
+  border-radius: 50%;
+}
+.ticket-stub__perforation::before { top: -9px; }
+.ticket-stub__perforation::after { bottom: -9px; }
+
+.ticket-stub__stub {
+  width: 150px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.ticket-stub__stub .ticket-stub__label { color: var(--brass); }
+
+.ticket-stub__resno {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.ticket-stub__status {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.ticket-stub__status.confirmed { background: var(--teal); }
+.ticket-stub__status.waitlisted { background: var(--amber-dim); }
+.ticket-stub__status.cancelled { background: var(--rust); }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.site-footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.78rem;
+  color: var(--brass);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 640px) {
+  .form-row,
+  .form-row--five { grid-template-columns: 1fr; }
+  .split-flap span { width: 22px; height: 32px; font-size: 1rem; }
+  .split-flap span.gap { width: 8px; height: 32px; }
+  .ticket-stub { flex-direction: column; }
+  .ticket-stub__perforation { display: none; }
+  .ticket-stub__stub { width: auto; flex-direction: row; justify-content: space-between; }
+}
