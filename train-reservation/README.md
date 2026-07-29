@@ -66,3 +66,19 @@ train-reservation/
 
 Default staff password for adding/updating trains: `railway123`
 (change `ADMIN_PASSWORD` in `app.py` before deploying this anywhere real).
+# 📸 Screenshots
+
+## 🏠 Home Page
+![Home Page](images/home.png)
+
+## 🎫 Reserve Ticket
+![Reserve Ticket](images/reserve-ticket.png)
+
+## ❌ Cancel Ticket
+![Cancel Ticket](images/cancel-ticket.png)
+
+## 🔍 Ticket Status
+![Ticket Status](images/ticket-status.png)
+
+## ✏️ Update Train Details
+![Update Train Details](images/update-train.png)
